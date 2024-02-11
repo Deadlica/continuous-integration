@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Class that handles downloading and extracting GitHub repositories
+ */
 public class GitHubRepositoryDownloader {
     private final OkHttpClient client = new OkHttpClient();
     private final String zipName = "repository.zip";
@@ -16,6 +19,14 @@ public class GitHubRepositoryDownloader {
         return;
     }
 
+    /**
+     * This method downloads and extracts a GitHub repository
+     * @param commit the commit SHA value of the commit to be downloaded
+     * @param owner name of the GitHub repository owner
+     * @param repo name of the GitHub repository
+     * @throws IOException
+     * @throws NullPointerException
+     */
     public void download(String commit, String owner, String repo) throws IOException, NullPointerException {
         String url = String.format("https://api.github.com/repos/%s/%s/zipball/%s", owner, repo, commit);
         String token = "Bearer " + System.getenv("GITHUB_TOKEN");

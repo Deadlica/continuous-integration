@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+/**
+ * This class setups REST endpoints and handles different HTTP requests
+ */
 @RestController
 public class CIController {
 
@@ -18,6 +21,12 @@ public class CIController {
     return ResponseEntity.ok("CI server GET job done");
   }
 
+  /**
+   * Method for handling GitHub webhooks to download and test code
+   * @param requestBody GitHub's webhooks payload
+   * @return String response to indicate success/failure
+   * @throws IOException
+   */
   @PostMapping("/push")
   public String postPost(@RequestBody String requestBody) throws IOException {
     JSONObject jsonObject = new JSONObject(requestBody);
