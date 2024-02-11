@@ -31,7 +31,7 @@ class GitHubRepositoryDownloaderTests {
         GitHubRepositoryDownloader gitHubRepositoryDownloader = new GitHubRepositoryDownloader();
         gitHubRepositoryDownloader.download(commit, owner, repo);
 
-        File zipFile = new File("repository.zip");
+        File zipFile = new File(owner + "-" + repo + "-" + commit.substring(0, 7));
         assert zipFile.exists();
     }
 }
