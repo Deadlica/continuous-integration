@@ -1,0 +1,73 @@
+package CIserver.app;
+
+import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * BuildThread class that allows building of git repo to run after webhook receives response
+ */
+public class BuildThread extends Thread {
+    private final Runnable compilation;
+
+    /**
+     * Creates a runnable object that parses the requestBody,
+     * downloads the repo from the parsed commit SHA.
+     * After downloading it compiles the project and run unit tests.
+     * @param requestBody JSON data with information of the git commit,
+     *                    repository name, repository owner
+     */
+    public BuildThread(String requestBody) {
+        this.compilation = () -> {
+            // Parsing JSON data
+            JSONObject jsonObject = new JSONObject(requestBody);
+            JSONObject repository = jsonObject.getJSONObject("repository");
+            String commit = jsonObject.getString("after");
+            String repositoryName = repository.getString("name");
+            String owner = repository.getJSONObject("owner").getString("name");
+
+            // Download GitHub Repository
+            GitHubRepositoryDownloader gitHubDownloader = null;
+            String repo;
+            try {
+                gitHubDownloader = new GitHubRepositoryDownloader();
+                repo = gitHubDownloader.download(commit, owner, repositoryName);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if(repo.isEmpty()) {
+                throw new RuntimeException("Failed to download repository " + repositoryName);
+            }
+
+            // Compiles maven project
+            MavenCompiler mavenCompiler = new MavenCompiler();
+            String output = mavenCompiler.compile(repo);
+            if(output.isEmpty()) {
+                throw new RuntimeException("Failed to compile repository " + repositoryName);
+            }
+
+            //
+            // Code here for writing build log to database/file
+            //
+
+
+            // Deletes the downloaded repo (to save storage)
+            String repoPath = System.getProperty("user.dir") + File.separator + repo;
+            try {
+                FileUtils.deleteDirectory(new File(repoPath));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            File file = new File(repoPath);
+            if(file.exists()) {
+                output = "Failed to delete repository from server: " + repo;
+            }};
+    }
+
+    @Override
+    public void run() {
+                compilation.run();
+    }
+}
