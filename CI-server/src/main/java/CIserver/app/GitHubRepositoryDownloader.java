@@ -24,7 +24,7 @@ public class GitHubRepositoryDownloader {
      * @param repo name of the GitHub repository
      * @throws IOException if the response code from the HTTP request fails
      */
-    public void download(String commit, String owner, String repo) throws IOException {
+    public String download(String commit, String owner, String repo) throws IOException {
         String url = String.format("https://api.github.com/repos/%s/%s/zipball/%s", owner, repo, commit);
         String token = "Bearer " + System.getenv("GITHUB_TOKEN");
         String accept = "application/vnd.github+json";
@@ -60,7 +60,10 @@ public class GitHubRepositoryDownloader {
                 extract(fileName);
                 // Delete the zip file
                 File zipFile = new File(fileName + ".zip");
-                zipFile.delete();
+                if(!zipFile.delete()) {
+                    throw new RuntimeException("Failed to delete " + fileName + ".zip");
+                }
+                return fileName;
             }
         }
     }
@@ -69,7 +72,7 @@ public class GitHubRepositoryDownloader {
         try {
             // Create directory to extract files into
             File destDir = new File(directoryName);
-            if (!destDir.exists()) {
+            if(!destDir.exists()) {
                 destDir.mkdirs();
             }
 
@@ -78,20 +81,21 @@ public class GitHubRepositoryDownloader {
 
             // Extract files
             ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
+            while((entry = zis.getNextEntry()) != null) {
                 String entryName = entry.getName();
                 File entryFile = new File(directoryName, entryName);
 
                 // Create directories if necessary
-                if (entry.isDirectory()) {
+                if(entry.isDirectory()) {
                     entryFile.mkdirs();
-                } else {
+                }
+                else {
                     // Extract file
                     byte[] buffer = new byte[1024];
                     int bytesRead;
                     FileOutputStream fos = new FileOutputStream(entryFile);
                     BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
-                    while ((bytesRead = zis.read(buffer, 0, buffer.length)) != -1) {
+                    while((bytesRead = zis.read(buffer, 0, buffer.length)) != -1) {
                         bos.write(buffer, 0, bytesRead);
                     }
                     bos.close();
@@ -103,7 +107,8 @@ public class GitHubRepositoryDownloader {
             zis.close();
             fis.close();
 
-        } catch (IOException e) {
+        }
+        catch(IOException e) {
             e.printStackTrace();
         }
     }

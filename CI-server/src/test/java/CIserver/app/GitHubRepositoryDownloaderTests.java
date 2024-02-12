@@ -23,7 +23,7 @@ class GitHubRepositoryDownloaderTests {
      * @throws IOException GitHubRepositoryDownloader can throw IOException
      */
     @Test
-    void downloadRepository() throws IOException {
+    void downloadRepositoryTest() throws IOException {
         String commit = "4ed227fa48fc9106d176ed74d797484d5fa24790";
         String owner = "Deadlica";
         String repo = "continuous-integration";
@@ -31,7 +31,7 @@ class GitHubRepositoryDownloaderTests {
         GitHubRepositoryDownloader gitHubRepositoryDownloader = new GitHubRepositoryDownloader();
         gitHubRepositoryDownloader.download(commit, owner, repo);
 
-        File zipFile = new File(owner + "-" + repo + "-" + commit.substring(0, 7));
-        assert zipFile.exists();
+        File file = new File(owner + "-" + repo + "-" + commit.substring(0, 7));
+        assert file.exists();
     }
 }

@@ -39,6 +39,13 @@
 			<artifactId>json</artifactId>
 			<version>20210307</version> <!-- Use the latest version -->
 		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
