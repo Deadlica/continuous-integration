@@ -39,7 +39,7 @@ public class SQLhandler {
      * @param buildLogs The build logs of the build history entry
      * @throws SQLException If an SQL exception occurs
      */
-    public static void insertEntry(String commitId, String buildDate, String buildLogs) throws SQLException {
+    public void insertEntry(String commitId, String buildDate, String buildLogs) throws SQLException {
         String insertSQL = "INSERT INTO BuildHistory (commit_id, date, logs) VALUES (?,?,?)";
         try (PreparedStatement preparedStatement = conn.prepareStatement(insertSQL)) {
             preparedStatement.setString(1, commitId);
@@ -59,7 +59,7 @@ public class SQLhandler {
      *         or null if no build history is found for the commit ID
      * @throws SQLException If an SQL exception occurs
      */
-    public static Build getEntry(String commitId) throws SQLException {
+    public Build getEntry(String commitId) throws SQLException {
         String query = "SELECT * FROM BuildHistory WHERE commit_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, commitId);
@@ -82,7 +82,7 @@ public class SQLhandler {
      *         or null if no build history is found for the commit ID
      * @throws SQLException If an SQL exception occurs
      */
-    public static List<Build> getHistory() throws SQLException {
+    public List<Build> getHistory() throws SQLException {
         List<Build> buildList = new ArrayList<>();
         String query = "SELECT * FROM BuildHistory";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {

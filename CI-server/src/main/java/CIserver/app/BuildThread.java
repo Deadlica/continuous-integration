@@ -5,6 +5,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * BuildThread class that allows building of git repo to run after webhook receives response
@@ -48,10 +51,14 @@ public class BuildThread extends Thread {
                 throw new RuntimeException("Failed to compile repository " + repositoryName);
             }
 
-            //
-            // Code here for writing build log to database/file
-            //
-
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                SQLhandler sql = new SQLhandler();
+                sql.insertEntry(commit, dateFormat.format(date), output);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
             // Deletes the downloaded repo (to save storage)
             String repoPath = System.getProperty("user.dir") + File.separator + repo;
