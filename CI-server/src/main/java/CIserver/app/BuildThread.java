@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * BuildThread class that allows building of git repo to run after webhook receives response
@@ -63,11 +64,11 @@ public class BuildThread extends Thread {
             // Update commit status according to output
             updateCommitStatus(output, commit, statusChanger);
 
-            Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Stockholm"));
             try {
                 SQLhandler sql = new SQLhandler();
-                sql.insertEntry(commit, dateFormat.format(date), output);
+                sql.insertEntry(commit, dateFormat.format(new Date()), output);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
