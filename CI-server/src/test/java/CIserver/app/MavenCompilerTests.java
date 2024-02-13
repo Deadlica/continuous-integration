@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = GitHubRepositoryDownloader.class)
 class MavenCompilerTests {
-/*
+
     @Test
     void workingCompililation() throws IOException {
         String commit = "4ed227fa48fc9106d176ed74d797484d5fa24790";
@@ -30,7 +30,7 @@ class MavenCompilerTests {
         assertTrue(output.contains("BUILD SUCCESS"));
 
     }
-    */
+
     /*
     @Test
     void syntaxError() throws IOException {

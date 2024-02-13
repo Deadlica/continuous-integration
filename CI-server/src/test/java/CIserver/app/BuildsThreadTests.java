@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class BuildsThreadTests {
-/*
+
     @Test
     void testBuildThread() {
         String validRequestBody = "{\n" +
@@ -190,5 +190,5 @@ class BuildsThreadTests {
         // Run the build thread
         assertDoesNotThrow(buildThread::run);
     }
-     */
+
 }
