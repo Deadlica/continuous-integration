@@ -30,6 +30,14 @@ public class BuildThread extends Thread {
             String commit = jsonObject.getString("after");
             String repositoryName = repository.getString("name");
             String owner = repository.getJSONObject("owner").getString("name");
+            String repo_url = String.format("https://api.github.com/repos/%s/%s", owner, repositoryName);
+
+            //Set all statuses to pending
+            StatusUpdater statusChanger = new StatusUpdater(repo_url);
+            statusChanger.ChangeStatus("Download", "pending", "", commit);
+            statusChanger.ChangeStatus("Compilation", "pending", "", commit);
+            statusChanger.ChangeStatus("Tests", "pending", "", commit);
+
 
             // Download GitHub Repository
             GitHubRepositoryDownloader gitHubDownloader = null;
@@ -41,7 +49,10 @@ public class BuildThread extends Thread {
                 throw new RuntimeException(e);
             }
             if(repo.isEmpty()) {
+                statusChanger.ChangeStatus("Download", "failure", "Failed to download repository", commit); //Change commit status to signal that download failed
                 throw new RuntimeException("Failed to download repository " + repositoryName);
+            } else {
+                statusChanger.ChangeStatus("Download", "success", "Repository downloaded", commit); //Change commit status to signal that download is complete
             }
 
             // Compiles maven project
@@ -51,6 +62,9 @@ public class BuildThread extends Thread {
                 throw new RuntimeException("Failed to compile repository " + repositoryName);
             }
 
+            // Update commit status according to output
+            updateCommitStatus(output, commit, statusChanger);
+
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -59,6 +73,7 @@ public class BuildThread extends Thread {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+
 
             // Deletes the downloaded repo (to save storage)
             String repoPath = System.getProperty("user.dir") + File.separator + repo;
@@ -79,4 +94,31 @@ public class BuildThread extends Thread {
     public void run() {
                 compilation.run();
     }
+
+    /*
+    * Method for parsing the output log of a compilation to see if there was a compilation
+    * error or if any test failed
+    * 
+    * @param output  The string output of the compilation to be parsed
+    */
+    public static void updateCommitStatus(String output, String commit_id, StatusUpdater statusChanger) {
+        String[] lines = output.split("\n");
+        for (String line : lines) {
+            if (line.startsWith("[ERROR]")) {
+                // Compilation error handeled here
+                if(line.contains("COMPILATION ERROR")){
+                    statusChanger.ChangeStatus("Compilation", "failure", "There were compilation errors", commit_id);
+                    return;
+                }
+                // Test failed handeled here
+                else{
+                    statusChanger.ChangeStatus("Test", "failure", "At least one test failed", commit_id);
+                    return;
+                }
+            }
+        }
+        statusChanger.ChangeStatus("Compilation", "success", "Compiled without errors", commit_id);
+        statusChanger.ChangeStatus("Tests", "success", "All tests passed", commit_id);
+    }
+    
 }
