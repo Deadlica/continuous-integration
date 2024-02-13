@@ -33,6 +33,10 @@ public class CIController {
     return ResponseEntity.ok("CI Server work started");
   }
 
+  /**
+   * Method for handling error requests
+   * @return String response to indicate error
+   */
   @GetMapping("/error")
   public ResponseEntity<String> error() {
     return ResponseEntity.ok("error");

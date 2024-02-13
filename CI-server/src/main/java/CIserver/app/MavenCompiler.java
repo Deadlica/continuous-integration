@@ -55,6 +55,12 @@ public class MavenCompiler {
         return output;
     }
 
+    /**
+     * This method finds the root directory of the Maven project
+     * @param project name of the root directory of the project
+     * @throws RuntimeException if the root directory of the Maven project is not found
+     * @return the root directory of the Maven project
+     */
     private String findPomDirectory(String project) {
         Path searchRoot = Paths.get(System.getProperty("user.dir") + File.separator + project);
         FileSearcher fileSearcher = new FileSearcher("pom.xml");
@@ -67,6 +73,9 @@ public class MavenCompiler {
         return fileSearcher.getPomDirectory().toString();
     }
 
+    /**
+     * This class searches for a file in a directory
+     */
     private class FileSearcher extends SimpleFileVisitor<Path> {
         private Path pomDirectory;
         private String goal;
@@ -74,6 +83,12 @@ public class MavenCompiler {
             this.goal = goal;
         }
 
+        /**
+         * This method visits a file
+         * @param file the file to visit
+         * @param attrs the file attributes
+         * @return the result of the file visit
+         */
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             if (file.getFileName().toString().equals(goal)) {
@@ -83,11 +98,22 @@ public class MavenCompiler {
             return FileVisitResult.CONTINUE;
         }
 
+        /**
+         * This method visits a file that failed to be visited
+         * @param file the file that failed to be visited
+         * @param exc the exception that caused the file visit to fail
+         * @return the result of the file visit
+         */
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
             return FileVisitResult.CONTINUE;
         }
 
+
+        /**
+         * This method returns the root directory of the Maven project
+         * @return the root directory of the Maven project
+         */
         public Path getPomDirectory() {
             return pomDirectory;
         }
