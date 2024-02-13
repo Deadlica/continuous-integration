@@ -35,9 +35,6 @@ public class BuildThread extends Thread {
             //Set all statuses to pending
             StatusUpdater statusChanger = new StatusUpdater(repo_url);
             statusChanger.ChangeStatus("Download", "pending", "", commit);
-            statusChanger.ChangeStatus("Compilation", "pending", "", commit);
-            statusChanger.ChangeStatus("Tests", "pending", "", commit);
-
 
             // Download GitHub Repository
             GitHubRepositoryDownloader gitHubDownloader = null;
@@ -53,6 +50,7 @@ public class BuildThread extends Thread {
                 throw new RuntimeException("Failed to download repository " + repositoryName);
             } else {
                 statusChanger.ChangeStatus("Download", "success", "Repository downloaded", commit); //Change commit status to signal that download is complete
+                statusChanger.ChangeStatus("Compilation", "pending", "", commit);
             }
 
             // Compiles maven project
@@ -112,7 +110,8 @@ public class BuildThread extends Thread {
                 }
                 // Test failed handeled here
                 else{
-                    statusChanger.ChangeStatus("Test", "failure", "At least one test failed", commit_id);
+                    statusChanger.ChangeStatus("Compilation", "success", "Compiled without errors", commit_id);
+                    statusChanger.ChangeStatus("Tests", "failure", "At least one test failed", commit_id);
                     return;
                 }
             }
