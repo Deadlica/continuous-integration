@@ -17,25 +17,33 @@ public class MavenCompiler {
     public String compile(String project) {
         String output = "";
         try {
-            ProcessBuilder processBuilder;
+            String mvn;
             // Windows
             if(System.getProperty("os.name").toLowerCase().contains("win")) {
-                processBuilder = new ProcessBuilder("cmd", "/c", "mvn", "package");
+                mvn = "mvn.cmd";
             }
             // Linux / docker server
             else {
-                processBuilder = new ProcessBuilder("sudo", "mvn", "package");
+                mvn = "mvn";
             }
 
-            File projectDirectory = new File(findPomDirectory(project));
+            String projectDirectory = findPomDirectory(project);
 
-            processBuilder.directory(projectDirectory);
-            Process process = processBuilder.start();
+            Process process = Runtime.getRuntime().exec(new String[] {mvn, "-B", "-f", projectDirectory, "compile"});
 
             StringBuilder stringBuilder = new StringBuilder();
             InputStream inputStream = process.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            // Adding compile output
+            while((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+
+            process = Runtime.getRuntime().exec(new String[] {mvn, "-B", "-f", findPomDirectory(project), "test"});
+            inputStream = process.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            // Adding test output
             while((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line + "\n");
             }
