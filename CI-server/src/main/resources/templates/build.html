@@ -3,10 +3,35 @@
 <head>
     <title th:text="|Build information of commit: ${buildInfo.commit}|"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 30%;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-<p th:text="|Commit ID: ${buildInfo.commit}|" />
-<p th:text="|Build date: ${buildInfo.date}|" />
-<p th:text="|Build logs: ${buildInfo.log}|" />
+    <div style="text-align: center;">
+        <h1>Build Information</h1>
+    </div>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Commit ID:</td>
+            <td th:text="${buildInfo.commit}" />
+        </tr>
+        <tr>
+            <td>Date of commit:</td>
+            <td th:text="${buildInfo.date}" />
+        </tr>
+    </tbody>
+</table>
 </body>
+<div style="text-align: center;">
+    <h2>Logs</h2>
+</div>
+<p th:text="${buildInfo.log}" />
 </html>
