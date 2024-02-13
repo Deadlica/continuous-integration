@@ -68,6 +68,12 @@ public class GitHubRepositoryDownloader {
         }
     }
 
+    /**
+     * This method extracts a zip file
+     * @param directoryName the name of the directory to extract the zip file into
+     * @throws IOException if the file input stream fails to read the zip file
+     */
+
     private void extract(String directoryName) {
         try {
             // Create directory to extract files into

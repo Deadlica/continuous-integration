@@ -66,6 +66,8 @@ public class BuildThread extends Thread {
             }};
     }
 
+
+    // Run the thread
     @Override
     public void run() {
                 compilation.run();
