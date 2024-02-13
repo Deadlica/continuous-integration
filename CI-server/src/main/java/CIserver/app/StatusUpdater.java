@@ -1,5 +1,7 @@
 package CIserver.app;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class StatusUpdater {
@@ -31,11 +33,18 @@ public class StatusUpdater {
                 throw new IllegalArgumentException("Context and commit_id cannot be null");
             
             String url = baseURL + commit_id;
+            String detailUrl = "https://ci-server.samflix.se/builds/" + commit_id;
             
             // Build the data
             StringBuilder msgBuilder = new StringBuilder();
-            msgBuilder.append("{\"state\":\"").append(state).append("\",\"description\":\"").append(description).append("\",\"context\":\"").append(context).append("\"}");    
+            msgBuilder.append("{")
+                .append("\"state\":\"").append(state).append("\",")
+                .append("\"description\":\"").append(description).append("\",")
+                .append("\"context\":\"").append(context).append("\",")
+                .append("\"target_url\":\"").append(detailUrl).append("\"")
+                .append("}");
             String msg = msgBuilder.toString();
+
 
             // Build the process
             ProcessBuilder processBuilder = new ProcessBuilder(
@@ -48,12 +57,20 @@ public class StatusUpdater {
             );
 
             Process process = processBuilder.start();
+
+            // Read the output of the process
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
             int exitCode = process.waitFor();
             return exitCode;
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return 0; // We don't want the server to stop 
+            return 1;
         }
     }
 }
