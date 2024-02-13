@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title th:text="|Build information of commit: ${buildInfo.commit}|"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="|Commit ID: ${buildInfo.commit}|" />
+<p th:text="|Build date: ${buildInfo.date}|" />
+<p th:text="|Build logs: ${buildInfo.log}|" />
+</body>
+</html>

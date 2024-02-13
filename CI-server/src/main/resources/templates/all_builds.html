@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>List of all builds</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div th:each="build : ${builds}">
+    <h1 th:text="|Commit ID: ${build.commit}|" />
+    <p th:text="|Build date: ${build.date}|" />
+    <p th:text="|Build logs: ${build.log}|" />
+    <p>Link to specific build <a th:href="@{|/builds/${build.commit}|}">here</a></p>
+    <br />
+</div>
+</body>
+</html>
