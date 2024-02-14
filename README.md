@@ -1,7 +1,7 @@
 <h1 align="center">Continuous Integration Server</h1>
 
 <p align="center">
-    <img src="https://i.pinimg.com/originals/10/1e/11/101e1107e91db918a8e163622b2c95a0.gif" alt="code gif" width="540" height="405">
+    <img src="https://github.com/Deadlica/continuous-integration/blob/main/CI-server/assets/server.gif" alt="code gif" width="540" height="405">
 </p>
 
 
