@@ -1,14 +1,15 @@
 # Continuous Integration Server
 
-
 ## Introduction
-This Continuous Integration (CI) server automates the process of downloading projects from GitHub, compiling them with Maven, and running tests. Designed to streamline the development workflow, it provides immediate feedback on the build status of projects, enhancing productivity and code quality.
+This Continuous Integration (CI) server automates the process of downloading, compiling and testing projects on Github. It is designed to streamline the development workflow, as it provides immediate feedback on the build status of projects, creating a seamless integration and quality control.
 
-## Prerequisites
-Before you begin, ensure you have the following installed:
-- Java JDK 17 or newer
-- Maven 3.6.0 or newer
+## Technologies
+The following technologies are required to build and run the server:
+- Java version 17 or newer
+- Maven 3.11.0 or newer
 
+## Documentation
+Extensive javadocs can be found at https://deadlica.github.io/continuous-integration/
 
 ## Installation
 To set up the CI server on your local machine, follow these steps:
@@ -35,9 +36,59 @@ The following command will start the server on port `8080` and can be accessed h
 make run
 ```
 
+## How to run the Tests
+Go into the CI-server directory and enter the command 
+```bash
+mvn test
+```
+
+## How to generate javadocs pages
+Maven javadocs can be used to generate html pages of documentation for the entire project.
+The following command will do just that and can be found under CI-server/target/site/apidocs
+```bash
+make docs
+```
 
 ## Usage
 Integrate your GitHub projects with the CI server by setting up webhooks to trigger builds on push events. Consult the server documentation for detailed instructions on webhook setup and other features.
 
+## Build history webpage
+The following page contains the full build history of our CI server. It is possible to get more detailed information of each build entry by clicking on that entry in the list.
+[CI server web interface](https://ci-server.samflix.se/builds)
+
+## Essence
+The team currently in the stage "Formed". We have moved beyond the stage "seeded" since the members know the team goals and rules. The team is in the stage "formed" as it fulfils the checklist for the stage. Each member's individual responsibilites is defined, the members understand what their role is and everyone is commited to working in accorance to the defined rules and standards. Our communication is good and we have regular meetings which help us stay updated so that we can clearly define what needs to be done and how to distribute the work. The team members have begun to know and trust each other and this will hopefully improve as we continue to work together. We are focused on achieving the team mission (passing the assignment with P+) but we are not quite at the stage "Collaborating". We are currently getting to know and trust each other and we would also have become better at working better together as a cohesive unit to reach the next state. This will likely improve as we continue to work together as long as we work according to good principles and are mindfull of how we want to improve. 
 
 ## Contributions
+**André**
+- Worked on connecting the server to a SQL database
+- Implemented commit status functionality 
+- Worked on Essence and README
+
+**Gustaf**
+- Wrote the StatusUpdater class
+- Implemented commit status functionality 
+- Worked on connecting the server to a SQL database
+- Updated the web interface used to browse the Build history
+
+**Samuel**
+- Set up project structure (using spring boot etc...)
+- Set up a dedicated server under the "samflix.se", "samflix.app" domain
+- Wrote a docker image, to run the web server as a docker container on the dedicated server
+- Worked on parsing json, cloning repo and compiling code, running test
+- Setup generating javadocs pages and deploying to GitHub pages
+- Implemented the REST API endpoints
+- Implemented the Controller endpoints for dynamically displaying build logs on HTML pages
+- Added GitHub CI workflow for building the project with maven on every push and all pull requests to main
+- Worked on building threads
+
+**Noel**
+- Worked on parsing json, cloning repo and compiling code, running test
+- implemeted unit test for several sections
+- Worked on building threads  
+
+**Rafael**
+- implemeted unit test for several sections
+- Worked on README
+- Some documentation
+ 
