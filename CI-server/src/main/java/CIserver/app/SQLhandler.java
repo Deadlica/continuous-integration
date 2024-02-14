@@ -4,12 +4,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class handles all communication with the database for
+ * insertions, deletions and retrieval of builds
+ */
 public class SQLhandler {
     // JDBC URL with file path
     static final String JDBC_URL = "jdbc:sqlite:buildHistory.db";
     static Connection conn = null;
 
-    /*
+    /**
     * Instantiate a SQLhandler that opens a connection to the file buildHistory.db. 
     * If the file does not exist, it creates a file named buildHistory.db
     * If the table BuildHistory does not exist in the file, create it.
@@ -31,7 +35,7 @@ public class SQLhandler {
         }
     }
 
-    /*
+    /**
      * Method to insert a new build history entry into the database
      *
      * @param commitId  The commit ID of the build history entry
@@ -51,7 +55,7 @@ public class SQLhandler {
         }
     }
 
-    /*
+    /**
      * Method to retrieve build history for a specific commit ID from the database.
      *
      * @param commitId The commit ID for which to retrieve build history
@@ -75,7 +79,7 @@ public class SQLhandler {
         }
     }
 
-    /*
+    /**
      * Method to retrieve entire build history from the database.
      *
      * @return An array containing the build date and build logs for the given commit ID,

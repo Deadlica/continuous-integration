@@ -13,6 +13,11 @@ import java.util.zip.ZipInputStream;
  */
 public class GitHubRepositoryDownloader {
     private final OkHttpClient client = new OkHttpClient();
+
+    /**
+     * Default constructor
+     * @throws IOException
+     */
     public GitHubRepositoryDownloader() throws IOException {
         return;
     }

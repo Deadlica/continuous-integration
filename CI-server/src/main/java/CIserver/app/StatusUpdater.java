@@ -4,18 +4,21 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+/**
+ * This class handles the commit status updates with GitHub's API
+ */
 public class StatusUpdater {
     private static String baseURL;
 
-    /*
+    /**
      * Create an object
-     * @param URL of the repo
+     * @param url of the repo
      */
     public StatusUpdater(String url){
         baseURL = url + "/statuses/"; //Should be taken as parameter
     }
 
-    /*
+    /**
      * Method for updating the GitHub status of a specific commit
      * 
      * @param context  The context to be set for the commit status 
