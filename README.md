@@ -1,7 +1,22 @@
-# Continuous Integration Server
+<h1 align="center">Continuous Integration Server</h1>
+
+<p align="center">
+    <img src="https://i.pinimg.com/originals/10/1e/11/101e1107e91db918a8e163622b2c95a0.gif" alt="code gif" width="540" height="405">
+</p>
+
+
+<br />
 
 ## Introduction
 This Continuous Integration (CI) server automates the process of downloading, compiling and testing projects on Github. It is designed to streamline the development workflow, as it provides immediate feedback on the build status of projects, creating a seamless integration and quality control.
+
+![build](https://github.com/deadlica/continuous-integration/actions/workflows/build-maven.yml/badge.svg)
+
+![pull](https://img.shields.io/github/issues-pr/deadlica/continuous-integration)
+![issues](https://img.shields.io/github/issues/deadlica/continuous-integration)
+![coverage](https://img.shields.io/codecov/c/github/deadlica/continuous-integration)
+![language](https://img.shields.io/github/languages/top/deadlica/continuous-integration)
+
 
 ## Technologies
 The following technologies are required to build and run the server:
@@ -27,8 +42,18 @@ To set up the CI server on your local machine, follow these steps:
 
 
 ## Configuration
-Configure the server by setting environment variables or modifying configuration files as needed. Ensure the server has appropriate access to interact with GitHub repositories and perform builds.
+To ensure that the server works correctly with your GitHub repository, you need to configure a GitHub webhook under the repository settings as well as generating a GitHub token with read/write permissions to `Commit Statuses` and `Contents` for your repository.
 
+1. Make sure that the payload URL and content type is set as the table shown below (replace `domain` with the domain that you are using or `<IP-address>:<port>` if you are not using a domain)
+
+`Note: If you're using a normal IP-address then you need to portforward a port that maps to port 8080 for the machine that's running the server`
+
+| Field        | value                 |
+| ------------ | --------------------- |
+| Payload URL  | https://`domain`/push |
+| Content type | application/json      |
+
+2. Add the GitHub token for the repository as an environment variable for the machine running the CI server and name the environment variable as `GITHUB_TOKEN`
 
 ## How to run the CI server
 The following command will start the server on port `8080` and can be accessed here [localhost:8080](http://localhost:8080)
