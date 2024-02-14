@@ -24,6 +24,9 @@ jobs:
     - name: Build with Maven
       working-directory: ./CI-server
       run: mvn -B package --file pom.xml
+    - name: Generate JaCoCo coverage report
+      working-directory: ./CI-server
+      run: mvn jacoco:report
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       env:
