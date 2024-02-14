@@ -17,7 +17,7 @@ public class BuildTests {
     @Test
     public void testGetCommit() {
         build = new Build("abc123", "2023-02-15", "Build successful");
-        String expected = "abc123";
+        String expected = "abc123 1";
         String actual = build.getCommit();
         assertEquals(expected, actual);
     }
